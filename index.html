@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 10 Math & Science Notes Hub</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial}
+
+body{
+  background:#f4f6fb;
+  color:#111;
+  transition:.3s;
+}
+
+.dark{
+  background:#0f172a;
+  color:#fff;
+}
+
+header{
+  padding:20px;
+  text-align:center;
+  font-size:28px;
+  font-weight:bold;
+}
+
+.toggle{
+  position:absolute;
+  right:20px;
+  top:20px;
+  padding:8px 14px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+}
+
+.tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.tab{
+  padding:10px 18px;
+  border-radius:20px;
+  background:#e5e7eb;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.dark .tab{background:#1e293b}
+
+.tab.active{
+  background:#6366f1;
+  color:#fff;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:15px;
+}
+
+.card{
+  padding:20px;
+  border-radius:16px;
+  background:white;
+  cursor:pointer;
+  transition:.2s;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+}
+
+.dark .card{background:#1e293b}
+
+.card:hover{transform:scale(1.04)}
+
+.pdfSection{
+  display:none;
+  margin-top:20px;
+}
+
+.pdfSection iframe{
+  width:100%;
+  height:600px;
+  border:none;
+  border-radius:12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>📚 Class 10 Math & Science Notes Hub</header>
+<button class="toggle" onclick="toggleMode()">🌙 Mode</button>
+
+<div class="container">
+
+<div class="tabs" id="tabs"></div>
+<div class="grid" id="chapters"></div>
+
+<div class="pdfSection" id="pdfSection">
+  <h2 id="chapterTitle"></h2>
+  <iframe id="pdfViewer"></iframe>
+</div>
+
+</div>
+
+<script>
+const data = {
+
+Maths:[
+"Real Numbers","Polynomials","Linear Equations",
+"Quadratic Equations","Arithmetic Progressions",
+"Triangles","Coordinate Geometry","Trigonometry",
+"Applications of Trigonometry","Circles",
+"Constructions","Areas Related to Circles",
+"Surface Areas & Volumes","Statistics","Probability"
+],
+
+Physics:[
+"Light","Human Eye","Electricity","Magnetic Effects"
+],
+
+Chemistry:[
+"Chemical Reactions","Acids Bases Salts",
+"Metals & Non-metals","Carbon Compounds","Periodic Classification"
+],
+
+Biology:[
+"Life Processes","Control & Coordination",
+"Reproduction","Heredity & Evolution",
+"Our Environment","Natural Resources"
+]
+
+};
+
+const tabsDiv=document.getElementById("tabs");
+const chaptersDiv=document.getElementById("chapters");
+let currentSubject="Maths";
+
+function loadTabs(){
+  Object.keys(data).forEach(sub=>{
+    const btn=document.createElement("div");
+    btn.className="tab";
+    btn.innerText=sub;
+    btn.onclick=()=>selectSubject(sub);
+    tabsDiv.appendChild(btn);
+  });
+  tabsDiv.children[0].classList.add("active");
+}
+
+function selectSubject(sub){
+  currentSubject=sub;
+  [...tabsDiv.children].forEach(t=>t.classList.remove("active"));
+  [...tabsDiv.children].find(t=>t.innerText==sub).classList.add("active");
+  loadChapters();
+  document.getElementById("pdfSection").style.display="none";
+}
+
+function loadChapters(){
+  chaptersDiv.innerHTML="";
+  data[currentSubject].forEach(ch=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerText=ch;
+    card.onclick=()=>openChapter(ch);
+    chaptersDiv.appendChild(card);
+  });
+}
+
+function openChapter(ch){
+  const pdfPath="pdfs/"+currentSubject+"/"+ch+".pdf"; // folder structure: pdfs/Maths/Real Numbers.pdf
+  document.getElementById("pdfSection").style.display="block";
+  document.getElementById("chapterTitle").innerText=currentSubject+" - "+ch;
+  document.getElementById("pdfViewer").src=pdfPath;
+}
+
+function toggleMode(){
+  document.body.classList.toggle("dark");
+}
+
+loadTabs();
+loadChapters();
+</script>
+
+</body>
+</html>

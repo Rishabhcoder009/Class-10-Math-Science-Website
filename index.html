@@ -3,96 +3,196 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Class 10 Math & Science Notes Hub</title>
+<title>Class 10 Science & Maths Notes Hub</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Segoe UI,Arial,sans-serif
+}
 
 body{
   background:#f4f6fb;
-  color:#111;
-  transition:.3s;
+  color:#222;
+  transition:0.3s
 }
 
 .dark{
   background:#0f172a;
-  color:#fff;
+  color:#e5e7eb
 }
 
+/* Header */
 header{
-  padding:20px;
+  background:linear-gradient(120deg,#4f46e5,#06b6d4);
+  color:white;
   text-align:center;
-  font-size:28px;
+  padding:20px;
+  font-size:24px;
   font-weight:bold;
 }
 
-.toggle{
-  position:absolute;
-  right:20px;
-  top:20px;
-  padding:8px 14px;
+/* Top Bar */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+  padding:15px 20px;
+  align-items:center
+}
+
+.searchBox{
+  padding:10px;
+  width:280px;
+  max-width:100%;
+  border-radius:8px;
+  border:none;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+
+.btn{
+  padding:10px 15px;
   border:none;
   border-radius:8px;
   cursor:pointer;
+  background:#4f46e5;
+  color:white;
+  font-weight:bold
 }
 
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:20px;
-}
-
+/* Tabs */
 .tabs{
   display:flex;
-  flex-wrap:wrap;
+  justify-content:center;
   gap:10px;
-  margin-bottom:20px;
+  margin:10px;
+  overflow-x:auto;
+  padding-bottom:5px;
 }
 
 .tab{
-  padding:10px 18px;
-  border-radius:20px;
-  background:#e5e7eb;
-  cursor:pointer;
-  font-weight:600;
-}
-
-.dark .tab{background:#1e293b}
-
-.tab.active{
-  background:#6366f1;
-  color:#fff;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:15px;
-}
-
-.card{
-  padding:20px;
-  border-radius:16px;
+  padding:8px 18px;
   background:white;
+  border-radius:25px;
   cursor:pointer;
-  transition:.2s;
-  box-shadow:0 4px 10px rgba(0,0,0,.08);
+  box-shadow:0 3px 10px rgba(0,0,0,0.15);
+  font-weight:600;
+  white-space:nowrap;
 }
 
-.dark .card{background:#1e293b}
-
-.card:hover{transform:scale(1.04)}
-
-.pdfSection{
-  display:none;
-  margin-top:20px;
+.activeTab{
+  background:#4f46e5;
+  color:white
 }
 
-.pdfSection iframe{
-  width:100%;
-  height:600px;
-  border:none;
+/* Main Layout */
+.container{
+  display:grid;
+  grid-template-columns:300px 1fr;
+  gap:20px;
+  padding:20px
+}
+
+.chapterBox,.notes{
+  background:white;
   border-radius:12px;
+  padding:20px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+  height:70vh;
+  overflow-y:auto;
+}
+
+.dark .chapterBox,
+.dark .notes,
+.dark .tab{
+  background:#1e293b;
+  color:white
+}
+
+.chapterBtn{
+  display:block;
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+  border:none;
+  background:#eef2ff;
+  border-radius:8px;
+  cursor:pointer
+}
+
+.dark .chapterBtn{
+  background:#334155;
+  color:white
+}
+
+.downloadBtn{
+  margin-top:15px;
+  display:inline-block
+}
+
+/* Fullscreen */
+.fullscreenPDF{
+ position:fixed;
+ top:0;
+ left:0;
+ width:100vw;
+ height:100vh;
+ background:#fff;
+ z-index:9999;
+ padding:10px;
+}
+
+.fullscreenPDF iframe{
+ height:90vh !important
+}
+
+/* Footer */
+footer{
+  background:#111;
+  color:#ddd;
+  text-align:center;
+  padding:25px;
+  margin-top:30px;
+  font-size:14px
+}
+
+/* MOBILE RESPONSIVE */
+@media(max-width:900px){
+
+  header{
+    font-size:20px;
+    padding:15px;
+  }
+
+  .container{
+    grid-template-columns:1fr;
+    padding:10px;
+  }
+
+  .chapterBox,.notes{
+    height:auto;
+    max-height:500px;
+  }
+
+  iframe{
+    height:400px !important;
+  }
+
+  .topbar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .searchBox{
+    width:100%;
+  }
+
+  .btn{
+    width:100%;
+  }
 }
 
 </style>
@@ -100,100 +200,118 @@ header{
 
 <body>
 
-<header>📚 Class 10 Math & Science Notes Hub</header>
-<button class="toggle" onclick="toggleMode()">🌙 Mode</button>
+<header>📘 Class 10 Maths & Science Notes Hub</header>
 
-<div class="container">
-
-<div class="tabs" id="tabs"></div>
-<div class="grid" id="chapters"></div>
-
-<div class="pdfSection" id="pdfSection">
-  <h2 id="chapterTitle"></h2>
-  <iframe id="pdfViewer"></iframe>
+<div class="topbar">
+  <input type="text" id="search" class="searchBox" placeholder="Search chapter...">
+  <button class="btn" onclick="toggleDark()">🌙 Dark Mode</button>
 </div>
 
+<div class="tabs">
+  <div class="tab activeTab" onclick="showSubject('maths',this)">Maths</div>
+  <div class="tab" onclick="showSubject('physics',this)">Physics</div>
+  <div class="tab" onclick="showSubject('chemistry',this)">Chemistry</div>
+  <div class="tab" onclick="showSubject('biology',this)">Biology</div>
+</div>
+
+<div class="container">
+  <div class="chapterBox" id="chapters"></div>
+  <div class="notes" id="notes">
+    <h2>Welcome 👋</h2>
+    <p>Select a chapter to view notes.</p>
+  </div>
 </div>
 
 <script>
-const data = {
-
-Maths:[
-"Real Numbers","Polynomials","Linear Equations",
-"Quadratic Equations","Arithmetic Progressions",
-"Triangles","Coordinate Geometry","Trigonometry",
-"Applications of Trigonometry","Circles","Areas Related to Circles",
-"Surface Areas & Volumes","Statistics","Probability"
-],
-
-Physics:[
-"Light","Human Eye","Electricity","Magnetic Effects"
-],
-
-Chemistry:[
-"Chemical Reactions","Acids Bases Salts",
-"Metals & Non-metals","Carbon Compounds","Periodic Classification"
-],
-
-Biology:[
-"Life Processes","Control & Coordination",
-"Reproduction","Heredity & Evolution",
-"Our Environment","Natural Resources"
-]
-
-};
-
-const tabsDiv=document.getElementById("tabs");
-const chaptersDiv=document.getElementById("chapters");
-let currentSubject="Maths";
-
-function loadTabs(){
-  Object.keys(data).forEach(sub=>{
-    const btn=document.createElement("div");
-    btn.className="tab";
-    btn.innerText=sub;
-    btn.onclick=()=>selectSubject(sub);
-    tabsDiv.appendChild(btn);
-  });
-  tabsDiv.children[0].classList.add("active");
+const data={
+maths:{
+"Real Numbers":"pdf/maths-real-numbers.pdf"
+},
+physics:{
+"Light – Reflection & Refraction":"pdf/physics-light.pdf"
+},
+chemistry:{
+"Chemical Reactions & Equations":"pdf/chem-reactions.pdf"
+},
+biology:{
+"Life Processes":"pdf/bio-life-processes.pdf"
+}
 }
 
-function selectSubject(sub){
-  currentSubject=sub;
-  [...tabsDiv.children].forEach(t=>t.classList.remove("active"));
-  [...tabsDiv.children].find(t=>t.innerText==sub).classList.add("active");
-  loadChapters();
-  document.getElementById("pdfSection").style.display="none";
+let currentSubject="maths";
+const chapterBox=document.getElementById("chapters");
+const notesBox=document.getElementById("notes");
+
+function showSubject(subject,el){
+currentSubject=subject;
+document.querySelectorAll(".tab").forEach(t=>t.classList.remove("activeTab"));
+el.classList.add("activeTab");
+loadChapters();
 }
 
 function loadChapters(){
-  chaptersDiv.innerHTML="";
-  data[currentSubject].forEach(ch=>{
-    const card=document.createElement("div");
-    card.className="card";
-    card.innerText=ch;
-    card.onclick=()=>openChapter(ch);
-    chaptersDiv.appendChild(card);
-  });
+chapterBox.innerHTML="";
+Object.keys(data[currentSubject]).forEach(ch=>{
+let btn=document.createElement("button");
+btn.className="chapterBtn";
+btn.innerText=ch;
+btn.onclick=()=>showNotes(ch,currentSubject);
+chapterBox.appendChild(btn);
+});
 }
 
-function openChapter(ch){
-  const pdfPath="pdfs/"+currentSubject+"/"+ch+".pdf"; // folder structure: pdfs/Maths/Real Numbers.pdf
-  document.getElementById("pdfSection").style.display="block";
-  document.getElementById("chapterTitle").innerText=currentSubject+" - "+ch;
-  document.getElementById("pdfViewer").src=pdfPath;
+function showNotes(ch,subject){
+let pdfPath = data[subject][ch];
+notesBox.innerHTML=`
+<h2>${ch}</h2>
+<h4>${subject.toUpperCase()}</h4>
+<br>
+<button class="btn" onclick="toggleFullscreen()">📄 Full Screen</button>
+<br><br>
+<iframe src="${pdfPath}" width="100%" height="600px"></iframe>
+<br>
+<a class="btn downloadBtn" href="${pdfPath}" download>⬇ Download PDF</a>
+`;
 }
 
-function toggleMode(){
-  document.body.classList.toggle("dark");
+function toggleFullscreen(){
+let elem=document.querySelector("iframe");
+if(!document.fullscreenElement){
+elem.requestFullscreen().catch(()=>{});
+}else{
+document.exitFullscreen();
+}
 }
 
-loadTabs();
+document.getElementById("search").addEventListener("input",function(e){
+let term=e.target.value.toLowerCase();
+chapterBox.innerHTML="";
+if(term===""){loadChapters();return;}
+for(let subject in data){
+for(let chapter in data[subject]){
+if(chapter.toLowerCase().includes(term)){
+let btn=document.createElement("button");
+btn.className="chapterBtn";
+btn.innerText=`${chapter} (${subject})`;
+btn.onclick=()=>showNotes(chapter,subject);
+chapterBox.appendChild(btn);
+}
+}
+}
+});
+
+function toggleDark(){document.body.classList.toggle("dark");}
 loadChapters();
 </script>
 
+<footer>
+<h3>📞 Contact</h3>
+<p>Email: rishabhvachheta@gmail.com</p>
+<p>Phone: +91 6358849299</p>
+<br>
+<p>© 2026 Class 10 Maths & Science Notes Hub</p>
+<p>Made with ❤️ by Rishabh Vachheta</p>
+</footer>
+
 </body>
 </html>
-
-
-
